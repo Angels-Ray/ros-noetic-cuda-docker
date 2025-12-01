@@ -8,7 +8,7 @@ services:
             args:
                 USER_ID: ${USER_ID:-1000}
                 GROUP_ID: ${GROUP_ID:-1000}
-                USERNAME: ${USERNAME:-rosuser}
+                USERNAME: ${USERNAME:-ros}
         image: ros_noetic:latest
         container_name: ros_noetic
         network_mode: host
@@ -19,17 +19,18 @@ services:
             - /dev:/dev:rw
         gpus: all
         privileged: true
-        user: "${USERNAME:-rosuser}"
+        user: "${USERNAME:-ros}"
         environment:
             - DISABLE_ROS1_EOL_WARNINGS=1
             - NVIDIA_VISIBLE_DEVICES=all
             - NVIDIA_DRIVER_CAPABILITIES=all
             - DISPLAY=${DISPLAY:-:0}
             - ROSDISTRO_INDEX_URL=https://mirrors.ustc.edu.cn/rosdistro/index-v4.json
+            - PIP_INDEX_URL=https://mirrors.ustc.edu.cn/pypi/simple
             - QT_X11_NO_MITSHM=1
         stdin_open: true
         tty: true
         restart: unless-stopped
         command: ["/bin/bash", "-c", "tail -f /dev/null"]
 
-# docker compose up --build -d
+# USERNAME=ros docker compose up --build -d
